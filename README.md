@@ -31,6 +31,8 @@ http://localhost:8080/#/
 
 *Here you can test api*
 
+*Secret token could be found in .env (default: ed3bd310)*
+
 You could run tests
 ```
 make test
