@@ -1,0 +1,206 @@
+openapi: 3.0.0
+info:
+  title: 'Simple crud server'
+  description: 'Crud example'
+  contact:
+    name: 'nejtr0n <a6y@xakep.ru>'
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost/api/v1/'
+    description: 'API server'
+paths:
+  /articles:
+    get:
+      description: 'Returns all articles'
+      operationId: getList
+      parameters:
+        -
+          name: limit
+          in: query
+          description: 'maximum number of results to return'
+          required: false
+          schema:
+            type: integer
+            format: int64
+        -
+          name: offset
+          in: query
+          description: 'offset of first item in result'
+          required: false
+          schema:
+            type: integer
+            format: int64
+        -
+          name: sort
+          in: query
+          description: 'sort order'
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        '200':
+          description: 'articles response'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        default:
+          description: 'unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    put:
+      description: 'Update article'
+      operationId: updateItem
+      requestBody:
+        request: Article
+        description: 'Article description'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '200':
+          description: 'articles response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        default:
+          description: 'unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+      security:
+        -
+          api_key: []
+    post:
+      description: 'Create article'
+      operationId: createItem
+      requestBody:
+        request: Article
+        description: 'Article description'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewArticle'
+      responses:
+        '200':
+          description: 'articles response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        default:
+          description: 'unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+      security:
+        -
+          api_key: []
+  '/articles/{id}':
+    get:
+      description: 'Get article by id'
+      operationId: getItem
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'article id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'articles response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        default:
+          description: 'unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+    delete:
+      description: 'Remove article by id'
+      operationId: deleteItem
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'article id'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'articles response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        default:
+          description: 'unexpected error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+      security:
+        -
+          api_key: []
+components:
+  schemas:
+    ErrorModel:
+      required:
+        - status_code
+        - reason_phrase
+      properties:
+        status_code:
+          type: integer
+          format: int32
+        reason_phrase:
+          type: string
+      type: object
+    NewArticle:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+      type: object
+    Article:
+      type: object
+      allOf:
+        -
+          $ref: '#/components/schemas/NewArticle'
+        -
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              format: int64
+          type: object
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: auth
+      in: header
