@@ -22,7 +22,7 @@ ENV LANG ru_RU.UTF-8
 ENV LANGUAGE ru_RU:ru
 ENV LC_ALL ru_RU.UTF-8
 # PHP
-RUN apt-get install -y sudo libcurl4-gnutls-dev curl \
+RUN apt-get install -y sudo libcurl4-gnutls-dev curl git \
 libmcrypt-dev libzip-dev zip unzip postgresql-server-dev-all libfreetype6-dev libonig-dev \
 libjpeg62-turbo-dev libpng-dev libpcre3-dev librabbitmq-dev supervisor libevent-dev libssl-dev libsqlite3-dev libxml2-dev libmagickwand-dev \
     && docker-php-source extract \
