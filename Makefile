@@ -8,7 +8,7 @@ swagger:
 	@echo "Swagger generated"
 
 install:
-	@docker-compose exec -u `id -u` php composer install --ignore-platform-req=php
+	@docker-compose exec -u `id -u` php composer install --no-cache --ignore-platform-req=php
 
 migrate:
 	@docker-compose exec php ./vendor/bin/doctrine-migrations migrate
